@@ -47,6 +47,7 @@ var damage_received : float
 @onready var end_of_weapon = $water_gun/EndOfWeapon
 @onready var weapon_animation_player = $water_gun/AnimationPlayer
 @onready var weapon_equiped_sprite = $water_gun/Sprite2D
+@onready var weapon_equiped_cooldown = $water_gun/cooldown
 
 
 # Mining var
@@ -99,7 +100,7 @@ func _physics_process(delta):
 		weapon_equiped_sprite.flip_v = true
 
 	# shoot with weapon
-	if Input.is_action_just_pressed("left_click"):
+	if Input.is_action_pressed("left_click"):
 		weapon_equiped.visible = true
 		mining_pickaxe.visible = false
 		shoot()
@@ -248,17 +249,27 @@ Shoot/damage
 """
 
 func shoot():
-	# TODO use cooldown timer
-	weapon_shot.emit(
-		projectile_scene, 
-		end_of_weapon.global_position,
-		end_of_weapon.global_position.angle_to_point(get_global_mouse_position()),
-		z_index,
-		weapon_equiped.damage
-		)
-	# Play weapon shot animation
-	weapon_animation_player.play("shooting")
+	# TODO use cooldown timer	
+	if weapon_equiped_cooldown.time_left > 0:
+		return null
+	else:
+		weapon_equiped_cooldown.start()
 
+	if true:
+		print("timer_stop")
+
+		weapon_shot.emit(
+			projectile_scene, 
+			end_of_weapon.global_position,
+			end_of_weapon.global_position.angle_to_point(get_global_mouse_position()),
+			z_index,
+			weapon_equiped.damage
+			)
+		# Play weapon shot animation
+		weapon_animation_player.play("shooting")
+
+func _on_cooldown_timeout():
+	weapon_equiped_cooldown.stop()
 
 func mine():
 	"""
@@ -318,3 +329,5 @@ func die():
 
 func _on_has_died():
 	die()
+
+
