@@ -1,0 +1,99 @@
+[gd_scene load_steps=7 format=3 uid="uid://cfwqsr3cwlc8a"]
+
+[ext_resource type="Script" path="res://scripts/screens/game_screen.gd" id="1_jtbyn"]
+[ext_resource type="Texture2D" uid="uid://hd42jfupw83k" path="res://assets/sprites/coin.png" id="2_fc1lu"]
+[ext_resource type="FontFile" uid="uid://7u6ydjb55hlf" path="res://assets/fonts/PixelOperator8.ttf" id="2_fys6e"]
+[ext_resource type="Texture2D" uid="uid://c3abab5h8sl17" path="res://assets/sprites/collectibles/aquarq.png" id="4_aguty"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vde3y"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_drmps"]
+bg_color = Color(0.585847, 1.8049e-06, 4.33177e-07, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="gameScreen" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1_jtbyn")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="healthbar" type="ProgressBar" parent="MarginContainer/VBoxContainer/Control"]
+layout_mode = 0
+offset_right = 188.0
+offset_bottom = 32.0
+theme_override_fonts/font = ExtResource("2_fys6e")
+theme_override_styles/background = SubResource("StyleBoxFlat_vde3y")
+theme_override_styles/fill = SubResource("StyleBoxFlat_drmps")
+value = 100.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="coinControl" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+
+[node name="coin_icon" type="Sprite2D" parent="MarginContainer/VBoxContainer/HBoxContainer/coinControl"]
+position = Vector2(0, -5)
+scale = Vector2(1.57674, 1.57674)
+texture = ExtResource("2_fc1lu")
+centered = false
+hframes = 12
+
+[node name="coin_count_label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_fys6e")
+text = "0"
+
+[node name="aquarqControl" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="MarginContainer/VBoxContainer/HBoxContainer/aquarqControl"]
+texture = ExtResource("4_aguty")
+centered = false
+
+[node name="aquarq_count_label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_fys6e")
+text = "0"

@@ -1,0 +1,85 @@
+[gd_scene load_steps=5 format=3 uid="uid://ckkprt2c4gy2i"]
+
+[ext_resource type="Script" path="res://scripts/menu/main_menu.gd" id="1_ikh40"]
+[ext_resource type="FontFile" uid="uid://cqr07pqfl0lgn" path="res://themes/main_menu_theme/fonts/PixelOperator8-Bold.ttf" id="2_bhi0r"]
+[ext_resource type="Texture2D" uid="uid://qkl1cwpjt1we" path="res://themes/main_menu_theme/background/Mine.png" id="3_0s1bu"]
+[ext_resource type="Theme" uid="uid://dntd5u6qik2vy" path="res://themes/main_menu_theme/main_menu_theme.tres" id="4_a1wnx"]
+
+[node name="mainMenu" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("1_ikh40")
+
+[node name="mainTitle" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -517.0
+offset_top = 43.0
+offset_right = -215.0
+offset_bottom = 66.0
+grow_horizontal = 2
+scale = Vector2(3.4275, 3.4275)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 4
+theme_override_fonts/font = ExtResource("2_bhi0r")
+text = "Deep Rock Galactic 2D"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="."]
+z_index = -1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -173.0
+offset_top = -101.0
+offset_right = 659.0
+offset_bottom = 339.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.690021, 0.690021)
+texture = ExtResource("3_0s1bu")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -785.0
+offset_bottom = -442.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(3.1413, 3.1413)
+size_flags_horizontal = 4
+theme = ExtResource("4_a1wnx")
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="playButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Play"
+
+[node name="optionButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Options"
+
+[node name="exitButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Exit"
+
+[connection signal="pressed" from="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/playButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/optionButton" to="." method="_on_option_button_pressed"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/exitButton" to="." method="_on_exit_button_pressed"]

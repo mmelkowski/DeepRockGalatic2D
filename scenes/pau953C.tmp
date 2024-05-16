@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3 uid="uid://cc0vwd78tbi1y"]
+
+[ext_resource type="Script" path="res://scripts/pause_menu.gd" id="1_j5n8j"]
+[ext_resource type="Theme" uid="uid://dntd5u6qik2vy" path="res://themes/main_menu_theme/main_menu_theme.tres" id="3_bp35e"]
+
+[node name="PauseMenu" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1_j5n8j")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+modulate = Color(0, 0, 0, 0.780392)
+z_index = -1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -99.0
+offset_top = -67.0
+offset_right = 733.0
+offset_bottom = 373.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.690021, 0.690021)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -785.0
+offset_bottom = -442.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(3.1413, 3.1413)
+size_flags_horizontal = 4
+theme = ExtResource("3_bp35e")
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="continueButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Continue"
+
+[node name="optionButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Options"
+
+[node name="mainMenuButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "To Main Menu"
+
+[node name="exitGameButton" type="Button" parent="MarginContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Exit Game"
+
+[connection signal="pressed" from="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/continueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/MarginContainer/VBoxContainer/mainMenuButton" to="." method="_on_main_menu_button_pressed"]

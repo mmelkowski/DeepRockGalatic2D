@@ -1,0 +1,88 @@
+[gd_scene load_steps=12 format=3 uid="uid://deblplueov16o"]
+
+[ext_resource type="Texture2D" uid="uid://ggwumvmv3fl8" path="res://assets/sprites/slime_green.png" id="1_4nrhl"]
+[ext_resource type="Script" path="res://scripts/slime.gd" id="1_44gtt"]
+[ext_resource type="PackedScene" uid="uid://ccli1iqcfmad1" path="res://scenes/hurtbox.tscn" id="3_wqitq"]
+[ext_resource type="PackedScene" uid="uid://xungmr44dtk0" path="res://scenes/hitbox.tscn" id="4_3yqst"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1cioy"]
+atlas = ExtResource("1_4nrhl")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lddn4"]
+atlas = ExtResource("1_4nrhl")
+region = Rect2(24, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eosxr"]
+atlas = ExtResource("1_4nrhl")
+region = Rect2(48, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ablor"]
+atlas = ExtResource("1_4nrhl")
+region = Rect2(72, 24, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_clyqd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1cioy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lddn4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eosxr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ablor")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jfqbd"]
+size = Vector2(14, 15)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_317yr"]
+size = Vector2(14, 15)
+
+[node name="slime" type="Node2D" groups=["enemy"]]
+script = ExtResource("1_44gtt")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -12)
+sprite_frames = SubResource("SpriteFrames_clyqd")
+frame = 3
+frame_progress = 0.03931
+flip_h = true
+
+[node name="RayCast_right" type="RayCast2D" parent="."]
+position = Vector2(0, -6)
+target_position = Vector2(8, 0)
+
+[node name="RayCast_left" type="RayCast2D" parent="."]
+position = Vector2(0, -6)
+target_position = Vector2(-9, 0)
+
+[node name="hurtbox" parent="." groups=["enemy"] instance=ExtResource("3_wqitq")]
+collision_layer = 5
+collision_mask = 11
+
+[node name="CollisionShape2D" parent="hurtbox" index="0" groups=["enemy"]]
+position = Vector2(0, -7.5)
+shape = SubResource("RectangleShape2D_jfqbd")
+
+[node name="hitbox" parent="." instance=ExtResource("4_3yqst")]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" parent="hitbox" index="0"]
+position = Vector2(0, -7.5)
+shape = SubResource("RectangleShape2D_317yr")
+
+[connection signal="has_died" from="." to="." method="_on_has_died"]
+[connection signal="area_entered" from="hurtbox" to="." method="_on_hurtbox_area_entered"]
+
+[editable path="hurtbox"]
+[editable path="hitbox"]

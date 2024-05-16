@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=3 uid="uid://wlqlixgg7l0h"]
+
+[ext_resource type="Theme" uid="uid://dlu2j0ja8umre" path="res://scenes/theme_healthbar.tres" id="1_hks44"]
+[ext_resource type="FontFile" uid="uid://7u6ydjb55hlf" path="res://assets/fonts/PixelOperator8.ttf" id="2_08urp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k68bd"]
+bg_color = Color(0.00820202, 0.00820203, 0.00820202, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e1x8r"]
+bg_color = Color(0.579299, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="UI" type="CanvasLayer"]
+follow_viewport_enabled = true
+
+[node name="healthbar" type="ProgressBar" parent="."]
+offset_left = 4.0
+offset_top = 3.0
+offset_right = 60.0
+offset_bottom = 13.0
+theme = ExtResource("1_hks44")
+theme_override_fonts/font = ExtResource("2_08urp")
+theme_override_styles/background = SubResource("StyleBoxFlat_k68bd")
+theme_override_styles/fill = SubResource("StyleBoxFlat_e1x8r")
+step = 1.0
+value = 100.0
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
