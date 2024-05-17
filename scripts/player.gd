@@ -250,14 +250,8 @@ Shoot/damage
 
 func shoot():
 	# TODO use cooldown timer	
-	if weapon_equiped_cooldown.time_left > 0:
-		return null
-	else:
+	if weapon_equiped_cooldown.time_left == 0:
 		weapon_equiped_cooldown.start()
-
-	if true:
-		print("timer_stop")
-
 		weapon_shot.emit(
 			projectile_scene, 
 			end_of_weapon.global_position,
