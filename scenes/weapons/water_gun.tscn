@@ -82,4 +82,4 @@ libraries = {
 }
 
 [node name="cooldown" type="Timer" parent="."]
-wait_time = 0.3
+wait_time = 0.2

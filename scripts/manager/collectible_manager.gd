@@ -6,6 +6,7 @@ static var total_aquarq_amount : int
 signal on_collectible_award_received
 signal on_health_collectible_award_received
 
+# FIXME reinit the variables so they are clear
 
 func give_pickup_award(award_type : String, collectible_award : int):
 	match award_type:
@@ -15,7 +16,6 @@ func give_pickup_award(award_type : String, collectible_award : int):
 			on_collectible_award_received.emit("coin", total_coin_amount)
 
 		"aquarq":
-			print("collectible aq")
 			total_aquarq_amount += collectible_award
 			on_collectible_award_received.emit("aquarq", total_aquarq_amount)
 

@@ -12,7 +12,7 @@ const PAUSE_MENU = preload("res://scenes/screens/pause_menu.tscn")
 var PAUSE_MENU_instance : CanvasLayer
 
 # Quantity to hp value var
-var red_sugar_amount_to_hp: int = 10
+var red_sugar_amount_to_hp: int = 40
 var health_pickup_amount_to_hp: int = 50
 
 
@@ -27,6 +27,7 @@ func _ready():
 
 	# set camera limit to killzone
 	camera_2d.limit_bottom = killzone.position.y
+
 
 func _on_player_weapon_shot(projectile_scene, location, angle, zdex, base_damage):
 	var projectile = projectile_scene.instantiate()
@@ -56,3 +57,4 @@ func on_health_collectible_award_received(type: String, amount: int):
 			player.hp += amount * red_sugar_amount_to_hp
 		"health_pickup":
 			player.hp += amount * health_pickup_amount_to_hp
+
