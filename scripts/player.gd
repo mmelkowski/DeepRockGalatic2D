@@ -171,19 +171,20 @@ func climb_state(_delta):
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	# Aply movement
+	#print("direction: ", direction)
 	if direction:
 		velocity = direction * CLIMB_SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, CLIMB_SPEED)
 		velocity.y = move_toward(velocity.y, 0, CLIMB_SPEED)
 		# Play animations
-		# FIXME animated_sprite.play("run")
-		if direction != Vector2(0,0):
+		# FIXME animation don't transition from previous animation to climb anim
+		if direction == Vector2(0,0):
 			# need climbing stance
-			animated_sprite.play("idle")
+			animated_sprite.play("climb_idle")
 		else:
 			# animation is not continu
-			animated_sprite.play("run")
+			animated_sprite.play("climb_move")
 			
 	move_and_slide()
 
@@ -231,7 +232,7 @@ func _on_hurtbox_area_entered(hitbox_enemy):
 
 
 func knockback(hit_pos):
-	# TODO play animation hit
+	# FIXME play animation hit
 	animated_sprite.play("hit")
 	# knockback from hit
 	var knockback_vector_on_hurt = knockback_vector.rotated(global_position.angle_to_point(hit_pos))
@@ -249,7 +250,6 @@ Shoot/damage
 """
 
 func shoot():
-	# TODO use cooldown timer	
 	if weapon_equiped_cooldown.time_left == 0:
 		weapon_equiped_cooldown.start()
 		weapon_shot.emit(
@@ -267,7 +267,7 @@ func _on_cooldown_timeout():
 
 func mine():
 	"""
-	# TODO try to just use math to get mining location instead of permanent marker
+	# Maybe try to just use math to get mining location instead of permanent marker
 	var angle = global_position.angle_to_point(get_global_mouse_position())
 	var mining_dist = Vector2(20, 0)
 	var mining_point = global_position + mining_dist

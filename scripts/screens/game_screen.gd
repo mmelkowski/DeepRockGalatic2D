@@ -15,8 +15,3 @@ func on_collectible_award_received(award_type : String, total_award : int):
 
 		"aquarq":
 			aquarq_count_label.text = str(total_award)
-
-"""
-func on_coin_award_received(total_award : int):
-	coin_count_label.text = str(total_award)
-"""
