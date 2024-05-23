@@ -39,6 +39,7 @@ func _process(delta):
 		velocity.y += gravity * delta
 	move_and_slide()
 
+
 func _on_hurtbox_area_entered(hitbox):
 	# add check for in group of projectile
 	received_damage = hitbox.get_parent().base_damage
