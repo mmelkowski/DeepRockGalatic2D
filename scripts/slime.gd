@@ -1,6 +1,7 @@
-extends Node2D
+extends CharacterBody2D
 
 const SPEED = 60
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 var direction = 1
 @onready var ray_cast_right = $RayCast_right
@@ -32,8 +33,11 @@ func _process(delta):
 		direction = 1
 		animated_sprite.flip_h = false
 
-	position.x += direction * SPEED * delta
-
+	velocity.x += direction * SPEED * delta
+	# Add the gravity
+	if not is_on_floor():
+		velocity.y += gravity * delta
+	move_and_slide()
 
 func _on_hurtbox_area_entered(hitbox):
 	# add check for in group of projectile

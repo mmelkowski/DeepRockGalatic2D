@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://deblplueov16o"]
+[gd_scene load_steps=13 format=3 uid="uid://deblplueov16o"]
 
 [ext_resource type="Texture2D" uid="uid://ggwumvmv3fl8" path="res://assets/sprites/slime_green.png" id="1_4nrhl"]
 [ext_resource type="Script" path="res://scripts/slime.gd" id="1_44gtt"]
@@ -47,7 +47,10 @@ size = Vector2(14, 15)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_317yr"]
 size = Vector2(14, 15)
 
-[node name="slime" type="Node2D" groups=["enemy"]]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h2mtb"]
+size = Vector2(14, 15)
+
+[node name="slime" type="CharacterBody2D" groups=["enemy"]]
 script = ExtResource("1_44gtt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -80,6 +83,10 @@ collision_mask = 2
 [node name="CollisionShape2D" parent="hitbox" index="0"]
 position = Vector2(0, -7.5)
 shape = SubResource("RectangleShape2D_317yr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -7.5)
+shape = SubResource("RectangleShape2D_h2mtb")
 
 [connection signal="has_died" from="." to="." method="_on_has_died"]
 [connection signal="area_entered" from="hurtbox" to="." method="_on_hurtbox_area_entered"]
