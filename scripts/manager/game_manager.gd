@@ -21,7 +21,7 @@ func _ready():
 	#assert(player != null)
 	# on player signal "weapon_shot" use func "_on_player_weapon_shot"
 	player.weapon_shot.connect(_on_player_weapon_shot)
-	
+
 	# connect signal for health pickup
 	CollectibleManager.on_health_collectible_award_received.connect(on_health_collectible_award_received)
 

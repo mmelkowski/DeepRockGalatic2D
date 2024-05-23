@@ -14,6 +14,7 @@ signal to_pause
 # Physics const
 const SPEED = 130.0
 const JUMP_VELOCITY = -300.0
+const POGO_JUMP_VELOCITY = -350.0
 const CLIMB_SPEED = 70.0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -49,6 +50,7 @@ var damage_received : float
 @onready var weapon_equiped_sprite = $water_gun/Sprite2D
 @onready var weapon_equiped_cooldown = $water_gun/cooldown
 
+@onready var pogo_sprite = $pogo_stick/Sprite2D
 
 # Mining var
 @onready var mining_pick_marker = $mining_pickaxe/mining_pick_marker
@@ -67,6 +69,7 @@ var platform_layer = 6
 enum {
 	MOVE,
 	CLIMB,
+	POGO,
 }
 # initialise state in MOVE
 var state = MOVE
@@ -81,6 +84,7 @@ func _ready():
 	# set correct weapon display
 	weapon_equiped.visible = true
 	mining_pickaxe.visible = false
+	pogo_sprite.visible = false
 
 
 func _physics_process(delta):
@@ -99,25 +103,48 @@ func _physics_process(delta):
 		animated_sprite.flip_h = true
 		weapon_equiped_sprite.flip_v = true
 
+	# weapon management
+	if Input.is_action_just_pressed("weapon_1"):
+		state = MOVE
+		move_state(delta)
+	elif Input.is_action_just_pressed("weapon_2"):
+		pass
+	elif Input.is_action_just_pressed("weapon_3"):
+		state = POGO
+		pogo_state(delta)
+	elif Input.is_action_just_pressed("weapon_4"):
+		pass
+
 	# shoot with weapon
 	if Input.is_action_pressed("left_click"):
 		weapon_equiped.visible = true
 		mining_pickaxe.visible = false
+		pogo_sprite.visible = false
+		if state == POGO:
+			state = MOVE
 		shoot()
 
 	# Mining
 	if Input.is_action_pressed("right_click"):
 		mining_pickaxe.visible = true
 		weapon_equiped.visible = false
+		pogo_sprite.visible = false
+		if state == POGO:
+			state = MOVE
 		mine()
 	if mining_timer.time_left > 0:
 		mine()
 
 	match state:
 		MOVE:
+			pogo_sprite.visible = false
 			move_state(delta)
 		CLIMB:
+			pogo_sprite.visible = false
 			climb_state(delta)
+		POGO:
+			pogo_state(delta)
+
 
 """
 State
@@ -163,7 +190,7 @@ func move_state(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	move_and_slide()
-	
+
 
 func climb_state(_delta):
 	if not is_on_ladder():
@@ -186,6 +213,45 @@ func climb_state(_delta):
 			# animation is not continu
 			animated_sprite.play("climb_move")
 			
+	move_and_slide()
+
+
+func pogo_state(delta):
+	mining_pickaxe.visible = false
+	weapon_equiped.visible = false
+	pogo_sprite.visible = true
+	if is_on_ladder() and Input.is_action_pressed("move_up"):
+		state = CLIMB
+
+	# Add the gravity
+	if not is_on_floor():
+		velocity.y += gravity * delta
+		if Input.is_action_pressed("move_down"):
+			# Remove collision with platform
+			set_collision_mask_value(platform_layer, false)
+	else:
+		velocity.y = POGO_JUMP_VELOCITY
+
+	# Handle jump.
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		if Input.is_action_pressed("move_down"):
+			# Remove collision with platform
+			set_collision_mask_value(platform_layer, false)
+
+	# Get the input direction and handle the movement/deceleration.
+	var direction = Input.get_axis("move_left", "move_right")
+
+	# Play animations
+	if is_on_floor():
+		animated_sprite.play("idle")
+	else:
+		animated_sprite.play("jump")
+
+	# Apply movement
+	if direction:
+		velocity.x = direction * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
 	move_and_slide()
 
 """
