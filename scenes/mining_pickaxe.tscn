@@ -78,6 +78,7 @@ texture = ExtResource("2_c0046")
 position = Vector2(17, 0)
 
 [node name="miningTimer" type="Timer" parent="."]
+wait_time = 0.5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

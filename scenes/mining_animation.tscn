@@ -78,7 +78,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"default",
-"speed": 10.0
+"speed": 20.0
 }]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D"]
@@ -87,5 +87,6 @@ autoplay = "default"
 script = ExtResource("2_ch4qp")
 
 [node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
