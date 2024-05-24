@@ -117,18 +117,14 @@ func _physics_process(delta):
 
 	# shoot with weapon
 	if Input.is_action_pressed("left_click"):
-		weapon_equiped.visible = true
-		mining_pickaxe.visible = false
-		pogo_sprite.visible = false
+		switch_visibility("weapon")
 		if state == POGO:
 			state = MOVE
 		shoot()
 
 	# Mining
 	if Input.is_action_pressed("right_click"):
-		mining_pickaxe.visible = true
-		weapon_equiped.visible = false
-		pogo_sprite.visible = false
+		switch_visibility("mining_pickaxe")
 		if state == POGO:
 			state = MOVE
 		mine()
@@ -217,9 +213,7 @@ func climb_state(_delta):
 
 
 func pogo_state(delta):
-	mining_pickaxe.visible = false
-	weapon_equiped.visible = false
-	pogo_sprite.visible = true
+	switch_visibility("pogo")
 	if is_on_ladder() and Input.is_action_pressed("move_up"):
 		state = CLIMB
 
@@ -390,4 +384,18 @@ func die():
 func _on_has_died():
 	die()
 
-
+func switch_visibility(tool: String):
+	match tool:
+		"weapon":
+			mining_pickaxe.visible = false
+			weapon_equiped.visible = true
+			pogo_sprite.visible = false
+		"mining_pickaxe":
+			mining_pickaxe.visible = true
+			weapon_equiped.visible = false
+			pogo_sprite.visible = false
+		"pogo":
+			mining_pickaxe.visible = false
+			weapon_equiped.visible = false
+			pogo_sprite.visible = true
+		
