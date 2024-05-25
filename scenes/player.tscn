@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://u8gi18mmmiiq"]
+[gd_scene load_steps=46 format=3 uid="uid://u8gi18mmmiiq"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_a53gl"]
 [ext_resource type="Texture2D" uid="uid://dyc2qp2oogtla" path="res://assets/sprites/knight.png" id="1_ivb0l"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://l53ij7qq7f84" path="res://scenes/mining_pickaxe.tscn" id="6_hmeoy"]
 [ext_resource type="Texture2D" uid="uid://dsr3srlgceh1f" path="res://assets/textures/lights/2d_lights_and_shadows_neutral_point_light.webp" id="7_64cbs"]
 [ext_resource type="PackedScene" uid="uid://dlm0dpvwc4lqe" path="res://scenes/weapons/pogo_stick.tscn" id="8_4wn3d"]
+[ext_resource type="PackedScene" uid="uid://b16i0h5jv7v4b" path="res://scenes/weapons/vacuum.tscn" id="9_vd71u"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g3qhl"]
 atlas = ExtResource("1_ivb0l")
@@ -342,6 +343,9 @@ position = Vector2(0, -3)
 rotation = 1.5708
 scale = Vector2(0.0429325, 0.0429325)
 
+[node name="vacuum" parent="." instance=ExtResource("9_vd71u")]
+position = Vector2(0, -7)
+
 [connection signal="has_died" from="." to="." method="_on_has_died"]
 [connection signal="timeout" from="hurtboxTimer" to="." method="_on_hurtbox_timer_timeout"]
 [connection signal="area_entered" from="hurtbox" to="." method="_on_hurtbox_area_entered"]
@@ -353,3 +357,4 @@ scale = Vector2(0.0429325, 0.0429325)
 [editable path="water_gun"]
 [editable path="mining_pickaxe"]
 [editable path="pogo_stick"]
+[editable path="vacuum"]

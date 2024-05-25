@@ -28,7 +28,6 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var hitbox_feet = $hitbox/CollisionShape2D
 @onready var hurtbox = $hurtbox/CollisionShape2D
 @onready var mining_pickaxe = $mining_pickaxe
-@onready var water_gun = $water_gun
 @onready var ladder_check = $ladderCheck
 
 
@@ -43,16 +42,31 @@ var base_damage = 0
 var damage_received : float
 @onready var hurtbox_timer = $hurtboxTimer
 
-# Weapon var
+# WATER_GUN
+@onready var water_gun = $water_gun
 @onready var projectile_scene = preload("res://scenes/projectile.tscn")
-@onready var weapon_equiped = water_gun
-@onready var end_of_weapon = $water_gun/EndOfWeapon
-@onready var weapon_animation_player = $water_gun/AnimationPlayer
-@onready var weapon_equiped_sprite = $water_gun/Sprite2D
-@onready var weapon_equiped_cooldown = $water_gun/cooldown
+@onready var end_of_water_gun = $water_gun/EndOfWeapon
+@onready var water_gun_animation_player = $water_gun/AnimationPlayer
+@onready var water_gun_sprite = $water_gun/Sprite2D
+@onready var water_gun_cooldown = $water_gun/cooldown
 
+# POGO
 @onready var pogo_sprite = $pogo_stick/Sprite2D
 static var jumb_buffered: bool
+
+# VACUUM
+@onready var vacuum = $vacuum
+@onready var end_of_vacuum = $vacuum/EndOfWeapon
+@onready var vacuum_sprite = $vacuum/Sprite2D
+
+# Weapon var
+@onready var weapon_equiped = water_gun
+@onready var end_of_weapon = end_of_water_gun
+@onready var weapon_animation_player = water_gun_animation_player
+@onready var weapon_equiped_sprite = water_gun_sprite
+@onready var weapon_equiped_cooldown = water_gun_cooldown
+var weapon_equiped_left_click_action = "shoot"
+
 
 # Mining var
 @onready var mining_pick_marker = $mining_pickaxe/mining_pick_marker
@@ -87,6 +101,7 @@ func _ready():
 	weapon_equiped.visible = true
 	mining_pickaxe.visible = false
 	pogo_sprite.visible = false
+	vacuum_sprite.visible = false
 
 
 func _physics_process(delta):
@@ -109,8 +124,13 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("weapon_1"):
 		state = MOVE
 		move_state(delta)
+		switch_weapon("water_gun")
+		switch_visibility("weapon")
 	elif Input.is_action_just_pressed("weapon_2"):
-		pass
+		state = MOVE
+		move_state(delta)
+		switch_weapon("vacuum")
+		switch_visibility("weapon")
 	elif Input.is_action_just_pressed("weapon_3"):
 		state = POGO
 		pogo_state(delta)
@@ -407,3 +427,15 @@ func switch_visibility(tool: String):
 			weapon_equiped.visible = false
 			pogo_sprite.visible = true
 		
+func switch_weapon(weapon: String):
+	match weapon:
+		"water_gun":
+			weapon_equiped = water_gun
+			end_of_weapon = end_of_water_gun
+			weapon_animation_player = water_gun_animation_player
+			weapon_equiped_sprite = water_gun_sprite
+			weapon_equiped_cooldown = water_gun_cooldown
+			weapon_equiped_left_click_action = "shoot"
+		"vacuum":
+			weapon_equiped = vacuum
+			weapon_equiped_left_click_action = "vacuum"
