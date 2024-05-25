@@ -15,6 +15,7 @@ signal to_pause
 const SPEED = 130.0
 const JUMP_VELOCITY = -300.0
 const POGO_JUMP_VELOCITY = -350.0
+const POGO_BOUNCE_VELOCITY = -250.0
 const CLIMB_SPEED = 70.0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -51,6 +52,7 @@ var damage_received : float
 @onready var weapon_equiped_cooldown = $water_gun/cooldown
 
 @onready var pogo_sprite = $pogo_stick/Sprite2D
+static var jumb_buffered: bool
 
 # Mining var
 @onready var mining_pick_marker = $mining_pickaxe/mining_pick_marker
@@ -217,6 +219,10 @@ func pogo_state(delta):
 	if is_on_ladder() and Input.is_action_pressed("move_up"):
 		state = CLIMB
 
+	# Handle jump.
+	if Input.is_action_pressed("jump"):
+		jumb_buffered = true
+
 	# Add the gravity
 	if not is_on_floor():
 		velocity.y += gravity * delta
@@ -224,13 +230,16 @@ func pogo_state(delta):
 			# Remove collision with platform
 			set_collision_mask_value(platform_layer, false)
 	else:
-		velocity.y = POGO_JUMP_VELOCITY
+		if jumb_buffered:
+			velocity.y = POGO_JUMP_VELOCITY
+			jumb_buffered = false
+		else:
+			velocity.y = POGO_BOUNCE_VELOCITY
 
-	# Handle jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		if Input.is_action_pressed("move_down"):
-			# Remove collision with platform
-			set_collision_mask_value(platform_layer, false)
+		
+	if Input.is_action_pressed("move_down"):
+		# Remove collision with platform
+		set_collision_mask_value(platform_layer, false)
 
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("move_left", "move_right")
@@ -280,7 +289,6 @@ hurtbox
 func _on_hurtbox_area_entered(hitbox_enemy):
 	if hurtbox_timer.time_left > 0:
 		return null
-	
 	else:
 		hurtbox_timer.start()
 	# Knockback
