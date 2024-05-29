@@ -58,15 +58,23 @@ static var jumb_buffered: bool
 @onready var vacuum = $vacuum
 @onready var end_of_vacuum = $vacuum/EndOfWeapon
 @onready var vacuum_sprite = $vacuum/Sprite2D
+var vacuum_array = []
 
 # Weapon var
+"""
 @onready var weapon_equiped = water_gun
 @onready var end_of_weapon = end_of_water_gun
 @onready var weapon_animation_player = water_gun_animation_player
 @onready var weapon_equiped_sprite = water_gun_sprite
 @onready var weapon_equiped_cooldown = water_gun_cooldown
 var weapon_equiped_left_click_action = "shoot"
-
+"""
+@onready var weapon_equiped = vacuum
+@onready var end_of_weapon = end_of_vacuum
+@onready var weapon_equiped_sprite = vacuum_sprite
+var weapon_equiped_left_click_action = "vacuum"
+@onready var weapon_animation_player = water_gun_animation_player
+@onready var weapon_equiped_cooldown = water_gun_cooldown
 
 # Mining var
 @onready var mining_pick_marker = $mining_pickaxe/mining_pick_marker
@@ -142,7 +150,11 @@ func _physics_process(delta):
 		switch_visibility("weapon")
 		if state == POGO:
 			state = MOVE
-		shoot()
+		#shoot()
+		if Input.is_action_pressed("left_control"):
+			vacuum_release_action()
+		else:
+			vacuum_suck_action()
 
 	# Mining
 	if Input.is_action_pressed("right_click"):
@@ -404,6 +416,28 @@ func _on_mining_timer_timeout():
 	if (mining_start_pos == tilemap_to_mine.local_to_map(mining_pick_marker.global_position)
 		and Input.is_action_pressed("right_click")):
 		tilemap_to_mine.set_cell(1, tilemap_to_mine.local_to_map(mining_pick_marker.global_position))
+
+
+# TODO Vacuum function
+func vacuum_suck_action():
+	var tile_to_get = tilemap_to_mine.local_to_map(get_global_mouse_position())
+	var block_type = tilemap_to_mine.get_cell_atlas_coords(1, tile_to_get)
+	if block_type != Vector2i(-1, -1) and vacuum_array.size() < 5:
+		print("vacuum_suck_action")
+		print(block_type)
+		vacuum_array.append(block_type)
+		tilemap_to_mine.set_cell(1, tile_to_get)
+
+
+func vacuum_release_action():
+	var tile_to_set = tilemap_to_mine.local_to_map(get_global_mouse_position())
+	var block_type = tilemap_to_mine.get_cell_atlas_coords(1, tile_to_set)
+	if block_type == Vector2i(-1, -1) and vacuum_array.size() > 0:
+		print("vacuum_release_action")
+		var block_type_to_set = vacuum_array.pop_back()
+		print(block_type_to_set)
+		# FIXME Somehow the block value is correct but nothing appear
+		tilemap_to_mine.set_cell(1, tile_to_set, 1, block_type_to_set)
 
 
 func die():
