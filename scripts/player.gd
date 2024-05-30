@@ -58,23 +58,17 @@ static var jumb_buffered: bool
 @onready var vacuum = $vacuum
 @onready var end_of_vacuum = $vacuum/EndOfWeapon
 @onready var vacuum_sprite = $vacuum/Sprite2D
+@onready var vacuum_animation_player = $vacuum/AnimationPlayer
+@onready var vacuum_cooldown = $vacuum/cooldown
 var vacuum_array = []
 
 # Weapon var
-"""
 @onready var weapon_equiped = water_gun
 @onready var end_of_weapon = end_of_water_gun
 @onready var weapon_animation_player = water_gun_animation_player
 @onready var weapon_equiped_sprite = water_gun_sprite
 @onready var weapon_equiped_cooldown = water_gun_cooldown
 var weapon_equiped_left_click_action = "shoot"
-"""
-@onready var weapon_equiped = vacuum
-@onready var end_of_weapon = end_of_vacuum
-@onready var weapon_equiped_sprite = vacuum_sprite
-var weapon_equiped_left_click_action = "vacuum"
-@onready var weapon_animation_player = water_gun_animation_player
-@onready var weapon_equiped_cooldown = water_gun_cooldown
 
 # Mining var
 @onready var mining_pick_marker = $mining_pickaxe/mining_pick_marker
@@ -106,10 +100,7 @@ func _ready():
 	add_to_group("Player")
 	
 	# set correct weapon display
-	weapon_equiped.visible = true
-	mining_pickaxe.visible = false
-	pogo_sprite.visible = false
-	vacuum_sprite.visible = false
+	switch_visibility("weapon")
 
 
 func _physics_process(delta):
@@ -120,7 +111,7 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("escape_key"):
 		to_pause.emit()
 
-	# Flip the sprite
+	# Flip the sprite to follow mouse
 	if get_global_mouse_position().x > global_position.x:
 		animated_sprite.flip_h = false
 		weapon_equiped_sprite.flip_v = false
@@ -147,14 +138,19 @@ func _physics_process(delta):
 
 	# shoot with weapon
 	if Input.is_action_pressed("left_click"):
-		switch_visibility("weapon")
 		if state == POGO:
 			state = MOVE
-		#shoot()
-		if Input.is_action_pressed("left_control"):
-			vacuum_release_action()
-		else:
-			vacuum_suck_action()
+
+		if weapon_equiped.visible != true:
+			switch_visibility("weapon")
+
+		if weapon_equiped_left_click_action == "shoot":
+			shoot()
+		elif weapon_equiped_left_click_action == "vacuum":
+			if Input.is_action_pressed("left_control"):
+				vacuum_release_action()
+			else:
+				vacuum_suck_action()
 
 	# Mining
 	if Input.is_action_pressed("right_click"):
@@ -423,8 +419,6 @@ func vacuum_suck_action():
 	var tile_to_get = tilemap_to_mine.local_to_map(get_global_mouse_position())
 	var block_type = tilemap_to_mine.get_cell_atlas_coords(1, tile_to_get)
 	if block_type != Vector2i(-1, -1) and vacuum_array.size() < 5:
-		print("vacuum_suck_action")
-		print(block_type)
 		vacuum_array.append(block_type)
 		tilemap_to_mine.set_cell(1, tile_to_get)
 
@@ -433,11 +427,10 @@ func vacuum_release_action():
 	var tile_to_set = tilemap_to_mine.local_to_map(get_global_mouse_position())
 	var block_type = tilemap_to_mine.get_cell_atlas_coords(1, tile_to_set)
 	if block_type == Vector2i(-1, -1) and vacuum_array.size() > 0:
-		print("vacuum_release_action")
 		var block_type_to_set = vacuum_array.pop_back()
 		print(block_type_to_set)
 		# FIXME Somehow the block value is correct but nothing appear
-		tilemap_to_mine.set_cell(1, tile_to_set, 1, block_type_to_set)
+		tilemap_to_mine.set_cell(1, tile_to_set, 0, block_type_to_set)
 
 
 func die():
@@ -446,9 +439,11 @@ func die():
 func _on_has_died():
 	die()
 
+
 func switch_visibility(tool: String):
 	match tool:
 		"weapon":
+			print("switching to weapon equiped ", weapon_equiped)
 			mining_pickaxe.visible = false
 			weapon_equiped.visible = true
 			pogo_sprite.visible = false
@@ -460,16 +455,24 @@ func switch_visibility(tool: String):
 			mining_pickaxe.visible = false
 			weapon_equiped.visible = false
 			pogo_sprite.visible = true
-		
+
+
 func switch_weapon(weapon: String):
 	match weapon:
 		"water_gun":
+			weapon_equiped.visible = false
 			weapon_equiped = water_gun
 			end_of_weapon = end_of_water_gun
 			weapon_animation_player = water_gun_animation_player
 			weapon_equiped_sprite = water_gun_sprite
 			weapon_equiped_cooldown = water_gun_cooldown
 			weapon_equiped_left_click_action = "shoot"
+
 		"vacuum":
+			weapon_equiped.visible = false
 			weapon_equiped = vacuum
+			end_of_weapon = end_of_vacuum
+			weapon_animation_player = vacuum_animation_player
+			weapon_equiped_sprite = vacuum_sprite
+			weapon_equiped_cooldown = vacuum_cooldown
 			weapon_equiped_left_click_action = "vacuum"
