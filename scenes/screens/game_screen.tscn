@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://cfwqsr3cwlc8a"]
+[gd_scene load_steps=9 format=3 uid="uid://cfwqsr3cwlc8a"]
 
 [ext_resource type="Script" path="res://scripts/screens/game_screen.gd" id="1_jtbyn"]
 [ext_resource type="Texture2D" uid="uid://hd42jfupw83k" path="res://assets/sprites/coin.png" id="2_fc1lu"]
 [ext_resource type="FontFile" uid="uid://7u6ydjb55hlf" path="res://assets/fonts/PixelOperator8.ttf" id="2_fys6e"]
 [ext_resource type="Texture2D" uid="uid://c3abab5h8sl17" path="res://assets/sprites/collectibles/aquarq.png" id="4_aguty"]
+[ext_resource type="Texture2D" uid="uid://c4uf4i6omya3k" path="res://assets/vacuum_bar/empty.png" id="5_k43tp"]
+[ext_resource type="Texture2D" uid="uid://cqebnmowpxf1" path="res://assets/vacuum_bar/fill.png" id="6_ct3s1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vde3y"]
 bg_color = Color(0, 0, 0, 1)
@@ -97,3 +99,16 @@ size_flags_vertical = 0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_fys6e")
 text = "0"
+
+[node name="vacuum_control" type="Control" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="MarginContainer/VBoxContainer/vacuum_control"]
+layout_mode = 2
+offset_right = 30.0
+offset_bottom = 10.0
+scale = Vector2(3.05758, 3.05758)
+max_value = 5.0
+step = 0.0
+texture_under = ExtResource("5_k43tp")
+texture_progress = ExtResource("6_ct3s1")

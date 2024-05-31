@@ -101,6 +101,7 @@ func _ready():
 	
 	# set correct weapon display
 	switch_visibility("weapon")
+	vacuum.visible = false
 
 
 func _physics_process(delta):
@@ -421,6 +422,9 @@ func vacuum_suck_action():
 	if block_type != Vector2i(-1, -1) and vacuum_array.size() < 5:
 		vacuum_array.append(block_type)
 		tilemap_to_mine.set_cell(1, tile_to_get)
+		# Update progress bar
+		WeaponManager.vacuum_update(vacuum_array.size())
+		weapon_animation_player.play("shooting")
 
 
 func vacuum_release_action():
@@ -428,9 +432,11 @@ func vacuum_release_action():
 	var block_type = tilemap_to_mine.get_cell_atlas_coords(1, tile_to_set)
 	if block_type == Vector2i(-1, -1) and vacuum_array.size() > 0:
 		var block_type_to_set = vacuum_array.pop_back()
-		print(block_type_to_set)
 		# FIXME Somehow the block value is correct but nothing appear
 		tilemap_to_mine.set_cell(1, tile_to_set, 0, block_type_to_set)
+		# Update progress bar
+		WeaponManager.vacuum_update(vacuum_array.size())
+		weapon_animation_player.play("shooting")
 
 
 func die():
